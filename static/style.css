@@ -1,0 +1,665 @@
+
+/* =========================================
+   GLOBAL
+========================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    font-family:
+        Inter,
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background:
+        radial-gradient(circle at top left,
+            #182d5a 0%,
+            #0b1224 35%,
+            #050912 100%);
+
+    color: #f5f7ff;
+
+    padding: 40px 20px;
+}
+
+
+/* =========================================
+   MAIN CONTAINER
+========================================= */
+
+.container {
+    width: 100%;
+    max-width: 760px;
+    margin: auto;
+}
+
+
+/* =========================================
+   CARD
+========================================= */
+
+.card {
+    background: rgba(16, 24, 43, 0.96);
+
+    border: 1px solid #2c3b60;
+
+    border-radius: 20px;
+
+    padding: 35px;
+
+    margin-bottom: 25px;
+
+    box-shadow:
+        0 25px 70px rgba(0, 0, 0, 0.35);
+
+    backdrop-filter: blur(10px);
+}
+
+
+/* =========================================
+   HIDDEN
+========================================= */
+
+.hidden {
+    display: none !important;
+}
+
+
+/* =========================================
+   TAGS
+========================================= */
+
+.tag {
+    display: inline-block;
+
+    padding: 7px 13px;
+
+    border-radius: 30px;
+
+    background: #263f7c;
+
+    color: #c9d7ff;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.2px;
+}
+
+.tag.warning {
+    background: #604719;
+
+    color: #ffd98c;
+}
+
+
+/* =========================================
+   HEADINGS
+========================================= */
+
+h1 {
+    font-size: 38px;
+
+    line-height: 1.2;
+
+    margin:
+        20px 0 10px;
+}
+
+h2 {
+    font-size: 28px;
+
+    line-height: 1.3;
+
+    margin:
+        20px 0 12px;
+}
+
+h3 {
+    line-height: 1.4;
+}
+
+
+/* =========================================
+   SUBTITLE
+========================================= */
+
+.subtitle {
+    color: #aeb9d3;
+
+    font-size: 16px;
+
+    line-height: 1.6;
+
+    margin-bottom: 30px;
+}
+
+
+/* =========================================
+   SECTION TITLE
+========================================= */
+
+.section-title {
+    margin-top: 38px;
+
+    padding-bottom: 13px;
+
+    border-bottom:
+        1px solid #2b3959;
+
+    color: #ffffff;
+
+    font-size: 20px;
+}
+
+
+/* =========================================
+   FORM LABELS
+========================================= */
+
+form>label {
+    display: block;
+
+    margin-top: 20px;
+
+    margin-bottom: 8px;
+
+    font-weight: 700;
+
+    color: #e9edfa;
+}
+
+
+/* =========================================
+   INPUTS
+========================================= */
+
+input[type="text"],
+textarea {
+    width: 100%;
+
+    padding: 14px 15px;
+
+    background: #090f1e;
+
+    color: #ffffff;
+
+    border:
+        1px solid #344361;
+
+    border-radius: 10px;
+
+    font-family: inherit;
+
+    font-size: 15px;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s;
+}
+
+input[type="text"]:focus,
+textarea:focus {
+    border-color: #718cff;
+
+    box-shadow:
+        0 0 0 3px rgba(113, 140, 255, 0.12);
+}
+
+textarea {
+    resize: vertical;
+
+    min-height: 120px;
+}
+
+
+/* =========================================
+   QUESTION CARDS
+========================================= */
+
+.question {
+    margin-top: 24px;
+
+    padding: 20px;
+
+    background: #0b1326;
+
+    border:
+        1px solid #293858;
+
+    border-radius: 13px;
+
+    transition:
+        border-color 0.2s,
+        transform 0.2s;
+}
+
+.question:hover {
+    border-color: #425782;
+
+    transform: translateY(-1px);
+}
+
+.question>p {
+    margin:
+        0 0 15px;
+
+    color: #f1f4ff;
+
+    font-weight: 700;
+
+    line-height: 1.55;
+}
+
+
+/* =========================================
+   RADIO OPTIONS
+========================================= */
+
+.option {
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+    width: 100%;
+
+    min-height: 46px;
+
+    padding: 10px 13px;
+
+    margin-top: 9px;
+
+    background: #141e35;
+
+    border:
+        1px solid #2d3b5a;
+
+    border-radius: 9px;
+
+    color: #cbd3e7;
+
+    font-size: 14px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s,
+        border-color 0.2s,
+        color 0.2s;
+}
+
+.option:hover {
+    background: #1a2744;
+
+    border-color: #617cff;
+
+    color: #ffffff;
+}
+
+.option input[type="radio"] {
+    width: 18px;
+
+    height: 18px;
+
+    margin: 0;
+
+    flex-shrink: 0;
+
+    accent-color: #617cff;
+
+    cursor: pointer;
+}
+
+
+/* =========================================
+   BUTTONS
+========================================= */
+
+button {
+    border: none;
+
+    border-radius: 10px;
+
+    padding: 14px 20px;
+
+    margin-top: 25px;
+
+    background:
+        linear-gradient(135deg,
+            #718cff,
+            #536fe5);
+
+    color: #ffffff;
+
+    font-family: inherit;
+
+    font-size: 15px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s,
+        filter 0.2s,
+        box-shadow 0.2s;
+}
+
+button:hover {
+    filter: brightness(1.08);
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 8px 25px rgba(76, 104, 220, 0.25);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+button.secondary {
+    background: transparent;
+
+    border:
+        1px solid #53627f;
+
+    color: #c9d2e7;
+
+    margin-left: 8px;
+
+    box-shadow: none;
+}
+
+button.secondary:hover {
+    background: #18223a;
+
+    border-color: #718cff;
+
+    color: white;
+}
+
+
+/* =========================================
+   WARNING BOX
+========================================= */
+
+.warning-box {
+    margin-top: 25px;
+
+    padding: 20px;
+
+    background: #211a0d;
+
+    border-left:
+        4px solid #f1b84b;
+
+    border-radius: 9px;
+
+    color: #f2dca8;
+
+    line-height: 1.6;
+}
+
+.warning-box strong {
+    color: #ffd36e;
+}
+
+
+/* =========================================
+   PERMISSION STATUS
+========================================= */
+
+#permissionStatus {
+    margin-top: 18px;
+
+    color: #ffbf72;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================
+   CAMERA
+========================================= */
+
+.camera-container {
+    position: relative;
+
+    width: 100%;
+
+    aspect-ratio: 16 / 10;
+
+    margin-top: 25px;
+
+    overflow: hidden;
+
+    background: #020305;
+
+    border:
+        1px solid #33415f;
+
+    border-radius: 15px;
+}
+
+#camera {
+    display: block;
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    background: #000000;
+}
+
+
+/* =========================================
+   COUNTDOWN
+========================================= */
+
+#countdown {
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: white;
+
+    font-size: 110px;
+
+    font-weight: 900;
+
+    text-shadow:
+        0 5px 30px rgba(0, 0, 0, 0.9);
+
+    pointer-events: none;
+}
+
+
+/* =========================================
+   PHOTO
+========================================= */
+
+#photoResult {
+    margin-top: 25px;
+}
+
+#photoResult h3 {
+    margin-bottom: 10px;
+}
+
+#photo {
+    display: block;
+
+    width: 100%;
+
+    max-height: 550px;
+
+    object-fit: contain;
+
+    background: #05070d;
+
+    border:
+        1px solid #34415e;
+
+    border-radius: 12px;
+}
+
+
+/* =========================================
+   SAFE MESSAGE
+========================================= */
+
+.safe-message {
+    margin-top: 15px;
+
+    padding: 16px;
+
+    background: #102c1b;
+
+    border:
+        1px solid #205f38;
+
+    border-radius: 9px;
+
+    color: #a9edbc;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   FINAL LESSON
+========================================= */
+
+.lesson {
+    margin-top: 25px;
+
+    padding: 20px;
+
+    background: #17233c;
+
+    border-left:
+        4px solid #718cff;
+
+    border-radius: 9px;
+
+    color: #d2daf0;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   SUCCESS ICON
+========================================= */
+
+.success {
+    width: 58px;
+
+    height: 58px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #1c6738;
+
+    color: #aaf0bf;
+
+    font-size: 28px;
+
+    font-weight: bold;
+}
+
+
+/* =========================================
+   FINAL LIST
+========================================= */
+
+li {
+    margin: 14px 0;
+
+    color: #cbd3e6;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+
+    body {
+        padding: 20px 12px;
+    }
+
+    .card {
+        padding: 22px 18px;
+
+        border-radius: 15px;
+    }
+
+    h1 {
+        font-size: 30px;
+    }
+
+    h2 {
+        font-size: 24px;
+    }
+
+    .question {
+        padding: 16px;
+    }
+
+    .option {
+        min-height: 48px;
+
+        padding: 10px;
+    }
+
+    button {
+        width: 100%;
+    }
+
+    button.secondary {
+        width: 100%;
+
+        margin-left: 0;
+    }
+
+    #countdown {
+        font-size: 80px;
+    }
+
+}

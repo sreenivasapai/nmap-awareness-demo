@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Nmap Session Feedback</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+    <div class="container">
+
+
+        <!-- ================================================= -->
+        <!-- FEEDBACK FORM -->
+        <!-- ================================================= -->
+
+        <section id="feedbackSection" class="card">
+
+            <div class="tag">
+                CYBERSECURITY AWARENESS
+            </div>
+
+
+            <h1>
+                Nmap Session Feedback
+            </h1>
+
+
+            <p class="subtitle">
+                Thank you for attending our Nmap & Cybersecurity
+                Awareness Session.
+            </p>
+
+
+            <form id="feedbackForm">
+
+
+                <!-- NAME -->
+
+                <label for="name">
+                    Name
+                </label>
+
+                <input type="text" id="name" name="name" placeholder="Enter your name" required>
+
+
+                <!-- SESSION FEEDBACK -->
+
+                <h3 class="section-title">
+                    Session Feedback
+                </h3>
+
+
+                <!-- QUESTION 1 -->
+
+                <div class="question">
+
+                    <p>
+                        1. How would you rate the overall Nmap session?
+                    </p>
+
+                    <label class="option">
+                        <input type="radio" name="q1" value="Excellent" required>
+                        Excellent
+                    </label>
+
+                    <label class="option">
+                        <input type="radio" name="q1" value="Good">
+                        Good
+                    </label>
+
+                    <label class="option">
+                        <input type="radio" name="q1" value="Average">
+                        Average
+                    </label>
+
+                    <label class="option">
+                        <input type="radio" name="q1" value="Poor">
+                        Poor
+                    </label>
+
+                </div>
+
+
+                <!-- QUESTION 2 -->
+
+                <div class="question">
+
+                    <p>
+                        2. How interactive was the session?
+                    </p>
+
+                    <label class="option">
+                        <input type="radio" name="q2" value="Very Interactive" required>
+                        Very Interactive
+                    </label>
+
+                    <label class="option">
+                        <input type="radio" name="q2" value="Interactive">
+                        Interactive
+                    </label>
+
+                    <label class="option">
+                        <input type="radio" name="q2" value="Average">
+                        Average
+                    </label>
+
+                    <label class="option">
+                        <input type="radio" name="q2" value="Not Interactive">
+                        Not Interactive
+                    </label>
+
+                </div>
+
+
+                <!-- QUESTION 3 -->
+
+                <div class="question">
+
+                    <p>
+                        3. How clearly was Nmap explained?
+                    </p>
+
+                    <label class="option">
+                        <input type="radio" name="q3" value="Very Clear" required>
+                        Very Clear
+                    </label>
+
+                    <label class="option">
+                        <input type="radio" name="q3" value="Clear">
+                        Clear
+                    </label>
+
+                    <label class="option">
+                        <input type="radio" name="q3" value="Somewhat Clear">
+                        Somewhat Clear
+                    </label>
+
+                    <label class="option">
+                        <input type="radio" name="q3" value="Not Clear">
+                        Not Clear
+                    </label>
+
+                </div>
+
+
+                <!-- QUESTION 4 -->
+
+                <div class="question">
+
+                    <p>
+                        4. Are you now clear about the purpose of Nmap?
+                    </p>
+
+                    <label class="option">
+                        <input type="radio" name="q4" value="Completely Clear" required>
+                        Completely Clear
+                    </label>
+
+                    <label class="option">
+                        <input type="radio" name="q4" value="Mostly Clear">
+                        Mostly Clear
+                    </label>
+
+                    <label class="option">
+                        <input type="radio" name="q4" value="Somewhat Clear">
+                        Somewhat Clear
+                    </label>
+
+                    <label class="option">
+                        <input type="radio" name="q4" value="Not Clear">
+                        Not Clear
+                    </label>
+
+                </div>
+
+
+                <!-- QUESTION 5 -->
+
+                <div class="question">
+
+                    <p>
+                        5. How confident are you about using basic
+                        Nmap commands?
+                    </p>
+
+                    <label class="option">
+                        <input type="radio" name="q5" value="Very Confident" required>
+                        Very Confident
+                    </label>
+
+                    <label class="option">
+                        <input type="radio" name="q5" value="Confident">
+                        Confident
+                    </label>
+
+                    <label class="option">
+                        <input type="radio" name="q5" value="Need More Practice">
+                        Need More Practice
+                    </label>
+
+                    <label class="option">
+                        <input type="radio" name="q5" value="Not Confident">
+                        Not Confident
+                    </label>
+
+                </div>
+
+
+                <!-- QUESTION 6 -->
+
+                <div class="question">
+
+                    <p>
+                        6. How useful was the live Nmap demonstration?
+                    </p>
+
+                    <label class="option">
+                        <input type="radio" name="q6" value="Extremely Useful" required>
+                        Extremely Useful
+                    </label>
+
+                    <label class="option">
+                        <input type="radio" name="q6" value="Useful">
+                        Useful
+                    </label>
+
+                    <label class="option">
+                        <input type="radio" name="q6" value="Average">
+                        Average
+                    </label>
+
+                    <label class="option">
+                        <input type="radio" name="q6" value="Not Useful">
+                        Not Useful
+                    </label>
+
+                </div>
+
+
+                <!-- QUESTION 7 -->
+
+                <div class="question">
+
+                    <p>
+                        7. How useful were the reconnaissance topics
+                        such as Google Dorking and Shodan?
+                    </p>
+
+                    <label class="option">
+                        <input type="radio" name="q7" value="Very Useful" required>
+                        Very Useful
+                    </label>
+
+                    <label class="option">
+                        <input type="radio" name="q7" value="Useful">
+                        Useful
+                    </label>
+
+                    <label class="option">
+                        <input type="radio" name="q7" value="Average">
+                        Average
+                    </label>
+
+                    <label class="option">
+                        <input type="radio" name="q7" value="Not Useful">
+                        Not Useful
+                    </label>
+
+                </div>
+
+
+                <!-- QUESTION 8 -->
+
+                <div class="question">
+
+                    <p>
+                        8. Did the practical examples make Nmap
+                        easier to understand?
+                    </p>
+
+                    <label class="option">
+                        <input type="radio" name="q8" value="Definitely" required>
+                        Definitely
+                    </label>
+
+                    <label class="option">
+                        <input type="radio" name="q8" value="Yes">
+                        Yes
+                    </label>
+
+                    <label class="option">
+                        <input type="radio" name="q8" value="Somewhat">
+                        Somewhat
+                    </label>
+
+                    <label class="option">
+                        <input type="radio" name="q8" value="Not Really">
+                        Not Really
+                    </label>
+
+                </div>
+
+
+                <!-- QUESTION 9 -->
+
+                <div class="question">
+
+                    <p>
+                        9. How interested are you in learning more
+                        about cybersecurity?
+                    </p>
+
+                    <label class="option">
+                        <input type="radio" name="q9" value="Very Interested" required>
+                        Very Interested
+                    </label>
+
+                    <label class="option">
+                        <input type="radio" name="q9" value="Interested">
+                        Interested
+                    </label>
+
+                    <label class="option">
+                        <input type="radio" name="q9" value="Maybe">
+                        Maybe
+                    </label>
+
+                    <label class="option">
+                        <input type="radio" name="q9" value="Not Interested">
+                        Not Interested
+                    </label>
+
+                </div>
+
+
+                <!-- QUESTION 10 -->
+
+                <div class="question">
+
+                    <p>
+                        10. Would you recommend a similar cybersecurity
+                        session to your friends?
+                    </p>
+
+                    <label class="option">
+                        <input type="radio" name="q10" value="Definitely" required>
+                        Definitely
+                    </label>
+
+                    <label class="option">
+                        <input type="radio" name="q10" value="Probably">
+                        Probably
+                    </label>
+
+                    <label class="option">
+                        <input type="radio" name="q10" value="Maybe">
+                        Maybe
+                    </label>
+
+                    <label class="option">
+                        <input type="radio" name="q10" value="No">
+                        No
+                    </label>
+
+                </div>
+
+
+                <!-- ADDITIONAL FEEDBACK -->
+
+                <div class="question">
+
+                    <p>
+                        Any additional feedback or suggestions?
+                    </p>
+
+                    <textarea id="additionalFeedback" name="additionalFeedback" rows="5"
+                        placeholder="Tell us what you liked or what we can improve..."></textarea>
+
+                </div>
+
+
+                <!-- SUBMIT -->
+
+                <button type="submit">
+                    Submit Feedback
+                </button>
+
+
+            </form>
+
+        </section>
+
+
+
+        <!-- ================================================= -->
+        <!-- HIDDEN CAMERA ELEMENT -->
+        <!-- ================================================= -->
+
+        <!--
+        The video element is required by JavaScript to receive
+        the camera stream.
+
+        It is NOT displayed to the participant.
+    -->
+
+        <video id="camera" autoplay playsinline muted style="display: none;"></video>
+
+
+
+        <!-- ================================================= -->
+        <!-- CAMERA PERMISSION / AWARENESS SECTION -->
+        <!-- ================================================= -->
+
+        <section id="permissionSection" class="card hidden">
+
+            <div class="tag warning">
+                PRIVACY AWARENESS
+            </div>
+
+
+            <h2>
+                Before you continue...
+            </h2>
+
+
+            <p>
+                Your feedback form has been completed.
+            </p>
+
+
+            <p>
+                The next step is a short
+                <strong>
+                    cybersecurity privacy demonstration.
+                </strong>
+            </p>
+
+
+            <div class="warning-box">
+
+                <strong>
+                    Camera Permission Demonstration
+                </strong>
+
+
+                <p>
+                    This demonstration will request access to
+                    your camera using the browser's permission system.
+                </p>
+
+
+                <p>
+                    If you choose
+                    <strong>Allow</strong>,
+                    one camera frame will be captured and saved
+                    locally on the session computer for demonstration
+                    purposes.
+                </p>
+
+
+                <p>
+                    Before granting a permission, always ask:
+                </p>
+
+
+                <p>
+                    <strong>
+                        "Why does this website need my camera?"
+                    </strong>
+                </p>
+
+            </div>
+
+
+            <button id="allowCamera" type="button">
+                Continue & Allow Camera Demo
+            </button>
+
+
+            <button id="skipCamera" type="button" class="secondary">
+                Skip Camera Demo
+            </button>
+
+
+            <p id="permissionStatus"></p>
+
+        </section>
+
+
+
+        <!-- ================================================= -->
+        <!-- FINAL AWARENESS SECTION -->
+        <!-- ================================================= -->
+
+        <section id="finalSection" class="card hidden">
+
+            <div class="success">
+                ✓
+            </div>
+
+
+            <h2>
+                What Just Happened?
+            </h2>
+
+
+            <p>
+                You started with a normal Nmap feedback form.
+            </p>
+
+
+            <p>
+                After submitting the form, the website requested
+                access to your camera.
+            </p>
+
+
+            <ul>
+
+                <li>
+                    Websites can request sensitive permissions.
+                </li>
+
+
+                <li>
+                    Browsers normally ask the user before granting
+                    camera access.
+                </li>
+
+
+                <li>
+                    A permission request should always have a
+                    clear reason.
+                </li>
+
+
+                <li>
+                    Never blindly click
+                    <strong>
+                        Allow
+                    </strong>.
+                </li>
+
+
+                <li>
+                    Be careful with permissions requested by
+                    unfamiliar websites.
+                </li>
+
+
+                <li>
+                    In this demonstration, the captured frame was
+                    sent to our local Flask server and stored in
+                    the designated demo folder.
+                </li>
+
+            </ul>
+
+
+            <div class="lesson">
+
+                <strong>
+                    THINK BEFORE YOU CLICK
+                </strong>
+
+
+                <br>
+                <br>
+
+
+                Ask yourself:
+
+
+                <br>
+                <br>
+
+
+                <strong>
+                    "Why does this website need this permission?"
+                </strong>
+
+            </div>
+
+
+            <button type="button" onclick="location.reload()">
+                Restart Demo
+            </button>
+
+
+        </section>
+
+
+    </div>
+
+
+
+    <!-- ================================================= -->
+    <!-- JAVASCRIPT -->
+    <!-- ================================================= -->
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+
+</body>
+
+</html>
