@@ -1,6 +1,6 @@
+.env
 __pycache__/
 *.pyc
-.env
 captured_photos/*.jpg
 captured_photos/*.jpeg
 captured_photos/*.png

@@ -2,14 +2,27 @@ from flask import Flask, request, jsonify, render_template
 from pathlib import Path
 from datetime import datetime
 import base64
+import os
+from dotenv import load_dotenv
+from supabase import create_client, Client
+load_dotenv()
 
 app = Flask(__name__)
 
 BASE_DIR = Path(__file__).resolve().parent
-
 PHOTO_DIR = BASE_DIR / "captured_photos"
-
 PHOTO_DIR.mkdir(exist_ok=True)
+
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+
+supabase: Client | None = None
+
+if SUPABASE_URL and SUPABASE_KEY:
+    supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+    print("[+] Supabase connected")
+else:
+    print("[!] Supabase environment variables are missing")
 
 
 @app.route("/")
@@ -19,7 +32,6 @@ def home():
 
 @app.post("/save-photo")
 def save_photo():
-
     data = request.get_json(silent=True)
 
     if not data:
@@ -37,7 +49,6 @@ def save_photo():
         }), 400
 
     try:
-
         header, encoded = image_data.split(",", 1)
 
         if "image/jpeg" not in header:
@@ -46,22 +57,34 @@ def save_photo():
                 "message": "Invalid image format"
             }), 400
 
-        image_bytes = base64.b64decode(
-            encoded,
-            validate=True
-        )
+        image_bytes = base64.b64decode(encoded, validate=True)
 
-        timestamp = datetime.now().strftime(
-            "%Y%m%d_%H%M%S_%f"
-        )
-
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
         filename = f"camera_demo_{timestamp}.jpg"
 
-        filepath = PHOTO_DIR / filename
+        # Local copy for local development/testing
+        local_path = PHOTO_DIR / filename
+        local_path.write_bytes(image_bytes)
 
-        filepath.write_bytes(image_bytes)
+        print(f"[+] Local copy saved: {local_path}")
 
-        print(f"[+] Photo saved: {filepath}")
+        # Upload to Supabase
+        if supabase is None:
+            return jsonify({
+                "success": False,
+                "message": "Supabase is not configured"
+            }), 500
+
+        supabase.storage.from_("captured_photos").upload(
+            filename,
+            image_bytes,
+            {
+                "content-type": "image/jpeg",
+                "upsert": "false"
+            }
+        )
+
+        print(f"[+] Photo uploaded to Supabase: {filename}")
 
         return jsonify({
             "success": True,
@@ -69,8 +92,7 @@ def save_photo():
         })
 
     except Exception as error:
-
-        print(f"[-] Error saving photo: {error}")
+        print(f"[-] Error saving/uploading photo: {error}")
 
         return jsonify({
             "success": False,
@@ -79,18 +101,9 @@ def save_photo():
 
 
 if __name__ == "__main__":
-
-    print()
-    print("======================================")
-    print("       NMAP AWARENESS DEMO")
-    print("======================================")
-    print()
-    print("Website:")
-    print("http://127.0.0.1:5000")
-    print()
-    print("Photos:")
-    print(PHOTO_DIR)
-    print()
+    print("NMAP AWARENESS DEMO")
+    print("Website: http://127.0.0.1:5000")
+    print("Photos:", PHOTO_DIR)
 
     app.run(
         host="0.0.0.0",
